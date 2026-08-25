@@ -65,11 +65,7 @@ export default function Navbar() {
         className="flex shrink-0 items-center gap-2 pr-2 text-left hover:opacity-80 transition-opacity focus:outline-none"
         aria-label="Skool Company, back to top"
       >
-        <span className="relative inline-flex h-7 w-7 items-center justify-center">
-          <span className="absolute inset-0 rounded-full border-2 border-circ" />
-          <span className="absolute left-1 top-1 h-3 w-3 rotate-12 border-2 border-rect" />
-          <span className="absolute bottom-1 right-1 h-0 w-0 border-x-[6px] border-b-[10px] border-x-transparent border-b-tri" />
-        </span>
+        <img src="/skool-logo.svg" alt="Skool Co. Logo" className="h-7 w-7 object-contain" />
         <span className="font-display text-[15px] font-extrabold tracking-tight text-foreground">
           skool<span className="text-muted-foreground">.company</span>
         </span>

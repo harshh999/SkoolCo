@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Clip path to carve out the bottom-left circle area where 'c' overflows -->
+    <clipPath id="circleClip">
+      <path d="M 0,0 L 500,0 L 500,500 L 0,500 Z" />
+    </clipPath>
+  </defs>
+  
+  <!-- Base Circle in brand teal -->
+  <circle cx="250" cy="250" r="220" fill="#4FB4B0" />
+  
+  <!-- White text 'skool' and 'co.' styled geometric and bold -->
+  <g fill="#FFFFFF" font-family="'Archivo', 'Helvetica Neue', Arial, sans-serif" font-weight="900" letter-spacing="-3">
+    <!-- First line: skool -->
+    <text x="75" y="295" font-size="145">skool</text>
+    <!-- Second line: co. -->
+    <text x="75" y="415" font-size="145">co.</text>
+  </g>
+  
+  <!-- Bridge connecting the top of the two 'o's in 'skool' to match the branding -->
+  <rect x="294" y="200" width="60" height="22" fill="#FFFFFF" />
+</svg>
