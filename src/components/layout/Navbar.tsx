@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { NAV_ITEMS } from "@/data/site-content";
 
 function scrollToId(id: string) {
@@ -13,12 +13,60 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("home");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navZIndex, setNavZIndex] = useState(50);
 
   useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
     const handleScroll = () => {
-      // Trigger between 80px and 120px (100px is the sweet spot)
-      setScrolled(window.scrollY > 100);
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 100);
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const scrollDelta = scrollY - lastScrollY;
+          const movementThreshold = 4;
+
+          const proj1 = document.getElementById("selected-project-1");
+          const orbit = document.getElementById("featured-project-4");
+
+          if (proj1 && orbit) {
+            const rect1 = proj1.getBoundingClientRect();
+            const rectOrbit = orbit.getBoundingClientRect();
+
+            const navbarBottom = 80;
+            const navbarTop = 20;
+
+            const isInsideProjects = rect1.top <= navbarBottom && rectOrbit.bottom >= navbarTop;
+
+            if (isInsideProjects) {
+              if (scrollDelta > movementThreshold) {
+                // Intentional scrolling down inside project region: stay behind project content
+                setNavZIndex(50);
+                lastScrollY = scrollY;
+              } else if (scrollDelta < -movementThreshold) {
+                // Intentional scrolling up inside project region: immediately pop to foreground
+                setNavZIndex(1000);
+                lastScrollY = scrollY;
+              }
+            } else {
+              // Outside project region (before Project One or after Orbit): normal layer
+              setNavZIndex(50);
+              lastScrollY = scrollY;
+            }
+          } else {
+            setNavZIndex(50);
+            lastScrollY = scrollY;
+          }
+
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -45,33 +93,43 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const baseTransition = "width 500ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1), padding 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)";
+  
+  const transformStyle = "translateX(-50%) translateY(0)";
+
   return (
     <div
-      className="glass fixed z-50 flex items-center gap-4 py-2 select-none pointer-events-auto"
+      className="fixed flex items-center justify-between py-2 select-none"
       style={{
+        zIndex: navZIndex,
+        pointerEvents: "auto",
+        opacity: 1,
         top: "20px",
         left: "50%",
-        transform: "translateX(-50%)",
+        transform: transformStyle,
         width: scrolled ? "min(92vw, 1200px)" : "min(760px, calc(100vw - 32px))",
         borderRadius: scrolled ? "26px" : "999px",
         paddingLeft: scrolled ? "26px" : "14px",
         paddingRight: scrolled ? "14px" : "8px",
-        transition:
-          "width 500ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1), padding 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+        background: "#FFFFFF",
+        border: "1px solid rgba(0,0,0,0.06)",
+        boxShadow: "0 8px 30px rgba(0,0,0,0.04)",
+        transition: baseTransition,
       }}
     >
-      <button
-        onClick={() => scrollToId("home")}
-        className="flex shrink-0 items-center gap-2 pr-2 text-left hover:opacity-80 transition-opacity focus:outline-none"
-        aria-label="Skool Company, back to top"
-      >
-        <img src="/skool-logo.svg" alt="Skool Co. Logo" className="h-7 w-7 object-contain" />
-        <span className="font-display text-[15px] font-extrabold tracking-tight text-foreground">
-          skool<span className="text-muted-foreground">.company</span>
-        </span>
-      </button>
+      {/* Left Zone: Logo */}
+      <div className="flex shrink-0 items-center">
+        <button
+          onClick={() => scrollToId("home")}
+          className="flex shrink-0 items-center gap-2 pr-2 text-left hover:opacity-80 transition-opacity focus:outline-none"
+          aria-label="Skool Company, back to top"
+        >
+          <img src="/SkoolCo-Logo.png" alt="Skool Co. Logo" className="h-14 w-14 object-contain" />
+        </button>
+      </div>
 
-      <nav className="mx-auto hidden items-center gap-1 md:flex">
+      {/* Middle Zone: Navigation */}
+      <nav className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 md:flex">
         {NAV_ITEMS.map((item) => (
           <button
             key={item.id}
@@ -87,38 +145,41 @@ export default function Navbar() {
         ))}
       </nav>
 
-      <button
-        onClick={() => scrollToId("contact")}
-        className="ml-auto hidden shrink-0 items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] focus:outline-none md:inline-flex"
-      >
-        say hello !
-        <span
-          className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          aria-hidden
+      {/* Right Zone: CTA & Mobile Menu Toggle */}
+      <div className="flex shrink-0 items-center gap-2">
+        <button
+          onClick={() => scrollToId("contact")}
+          className="hidden shrink-0 items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] focus:outline-none md:inline-flex group"
         >
-          ↗
-        </span>
-      </button>
+          say hello !
+          <span
+            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            aria-hidden
+          >
+            ↗
+          </span>
+        </button>
 
-      <button
-        onClick={() => setMobileOpen((open) => !open)}
-        className="ml-auto inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
-        aria-label="Toggle menu"
-        aria-expanded={mobileOpen}
-      >
-        <span className="flex flex-col gap-1">
-          <span
-            className={`block h-px w-4 bg-current transition-transform duration-300 ${
-              mobileOpen ? "translate-y-[3px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`block h-px w-4 bg-current transition-transform duration-300 ${
-              mobileOpen ? "-translate-y-[3px] -rotate-45" : ""
-            }`}
-          />
-        </span>
-      </button>
+        <button
+          onClick={() => setMobileOpen((open) => !open)}
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+        >
+          <span className="flex flex-col gap-1">
+            <span
+              className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                mobileOpen ? "translate-y-[3px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`block h-px w-4 bg-current transition-transform duration-300 ${
+                mobileOpen ? "-translate-y-[3px] -rotate-45" : ""
+              }`}
+            />
+          </span>
+        </button>
+      </div>
 
       {mobileOpen && (
         <div className="glass absolute left-0 right-0 top-[70px] mx-auto w-full animate-fade-in rounded-3xl p-4 md:hidden">

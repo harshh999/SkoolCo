@@ -209,12 +209,55 @@
   animation: skool-marquee 42s linear infinite;
 }
 
+@utility marquee-left-track {
+  animation: marquee-scroll-left 36s linear infinite;
+}
+
+@keyframes marquee-scroll-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @keyframes skool-marquee {
   from {
     transform: translate3d(-50%, 0, 0);
   }
   to {
     transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility animate-word-out {
+  animation: word-slide-out-down 450ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@utility animate-word-in {
+  animation: word-slide-in-down 450ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes word-slide-out-down {
+  0% {
+    transform: translate3d(0, 0%, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, 100%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes word-slide-in-down {
+  0% {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0%, 0);
+    opacity: 1;
   }
 }
 

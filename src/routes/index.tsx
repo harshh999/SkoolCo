@@ -8,8 +8,10 @@ import Hero from "@/components/sections/Hero";
 import FeaturedVisual from "@/components/sections/FeaturedVisual";
 import BrandStatement from "@/components/sections/BrandStatement";
 import ClientsMarquee from "@/components/sections/ClientsMarquee";
-import Work from "@/components/sections/Work";
+import SelectedWork from "@/components/sections/SelectedWork";
+import FeaturedProjects from "@/components/sections/FeaturedProjects";
 import Services from "@/components/sections/Services";
+import CinematicTransition from "@/components/sections/CinematicTransition";
 import About from "@/components/sections/About";
 import Contact from "@/components/sections/Contact";
 
@@ -68,8 +70,10 @@ function Index() {
       <FeaturedVisual />
       <BrandStatement />
       <ClientsMarquee />
-      <Work />
+      <SelectedWork />
+      <FeaturedProjects />
       <Services />
+      <CinematicTransition />
       <About />
       <Contact />
       <Footer />
