@@ -119,7 +119,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
 ];
 
 export const CONTACT_DETAILS = {
-  phone: "+91 89804 05004 / 64698",
+  phone: "+91 89804 05004",
   phoneLink: "tel:+918980405004",
   email: "hello@skool.company",
   emailLink: "mailto:hello@skool.company",

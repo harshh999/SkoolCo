@@ -57,17 +57,11 @@ export default function Services() {
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12 md:mb-16">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-rect shrink-0 animate-pulse" />
-            <span className="text-[12px] font-medium tracking-[0.14em] text-muted-foreground uppercase font-sans">
-              OUR SERVICES
-            </span>
-          </div>
           <h2
             className="font-display font-medium leading-[1.02] tracking-[-0.04em] text-foreground"
             style={{ fontSize: "clamp(36px, 4.5vw, 68px)" }}
           >
-            Ideas that move across every screen.
+            Services built around your brand.
           </h2>
         </div>
       </div>

@@ -49,7 +49,7 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
       <Navbar activeNav="work" />
 
       {/* Main Content Area in Normal Document Flow */}
-      <main className="flex-1 relative z-[1] w-full pt-28 sm:pt-36 md:pt-40 pb-20">
+      <main className="flex-1 relative z-10 bg-background shadow-[0_25px_50px_-12px_rgba(0,0,0,0.18)] w-full pt-28 sm:pt-36 md:pt-40 pb-20">
         {/* ========================================================================= */}
         {/* 2. PROJECT HERO */}
         {/* ========================================================================= */}
@@ -254,13 +254,13 @@ export default function ProjectDetailPage({ project }: ProjectDetailPageProps) {
 
                 {/* Card CTA Button */}
                 <div className="mt-8 pt-6 border-t border-white/10">
-                  <a
-                    href="/#contact"
+                  <Link
+                    to="/contact"
                     className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#f5f3ee] text-[#14161B] text-[13px] font-bold tracking-wider uppercase transition-all duration-300 hover:bg-white hover:scale-[1.02] active:scale-[0.98] cursor-pointer shadow-lg"
                   >
                     <span>Start a Project</span>
                     <span className="text-[16px] leading-none">↗</span>
-                  </a>
+                  </Link>
                   <p className="text-[11px] text-center text-white/40 mt-3 font-sans">
                     Have a similar challenge? Let's build something unforgettable.
                   </p>

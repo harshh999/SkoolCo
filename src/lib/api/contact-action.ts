@@ -36,15 +36,16 @@ Message: ${message}
           body: JSON.stringify({
             from: "Skool Website Form <onboarding@resend.dev>",
             to: receiverEmail,
-            subject: `New Inquiry from ${company}`,
+            subject: `New Inquiry from ${name} — Skool Company`,
+            reply_to: email,
             html: `
-              <h2>New Skool Co. Inquiry</h2>
+              <h2>New Website Inquiry</h2>
               <p><strong>Name:</strong> ${name}</p>
               <p><strong>Email:</strong> ${email}</p>
-              <p><strong>Company/Brand:</strong> ${company}</p>
-              <p><strong>Phone:</strong> ${phone || "Not provided"}</p>
-              <p><strong>Project Type:</strong> ${projectType || "Not specified"}</p>
-              <p><strong>Message:</strong></p>
+              <p><strong>Company / Brand:</strong> ${company}</p>
+              <p><strong>Phone Number:</strong> ${phone || "Not provided"}</p>
+              <p><strong>Services Needed:</strong> ${projectType || "Not specified"}</p>
+              <p><strong>Project Details:</strong></p>
               <p style="white-space: pre-line;">${message}</p>
             `,
           }),

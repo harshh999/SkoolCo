@@ -60,18 +60,18 @@ export default function InstagramFeed() {
       className="relative w-full bg-[#f7f7f5] pt-[100px] pb-[80px] select-none overflow-hidden"
     >
       {/* Centered Editorial Header */}
-      <div className="text-center mb-[45px] px-5 sm:px-8">
-        <h2
-          className="text-[#444c54] font-normal tracking-[0.02em] text-[28px] leading-[1.3]"
-          style={{ fontFamily: "'Poppins', sans-serif" }}
-        >
-          Curious to know what we are upto?
+      <div className="text-center mb-[50px] px-5 sm:px-8">
+        <h2 className="text-[#20242a] font-semibold tracking-[-0.03em] text-[32px] sm:text-[40px] md:text-[48px] leading-[1.15]">
+          Behind the work.
         </h2>
+        <p className="text-[#56616b] text-[16px] md:text-[18px] leading-[1.5] max-w-[460px] mx-auto mt-4">
+          A closer look at what we're creating, exploring and putting into the world.
+        </p>
         <a
           href="https://www.instagram.com/skoolcompany/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-[14px] font-medium text-[#4BB1AA] hover:opacity-85 transition-opacity duration-200 mt-2.5"
+          className="inline-flex items-center gap-1 text-[14px] font-medium text-[#4BB1AA] hover:opacity-85 transition-opacity duration-200 mt-5"
         >
           <span>@skoolcompany</span>
           <span className="text-[12px]">↗</span>

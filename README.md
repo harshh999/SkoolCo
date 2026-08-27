@@ -312,7 +312,7 @@
 },
 "contact_information": {
 "heading": "Get in touch",
-"phone": "+91 89804 05004 / 64698",
+"phone": "+91 89804 05004 ",
 "email": "hello@skool.company",
 "secondary_heading": "Let's discuss ideas",
 "address": "Skool Co., Banker's Colony, Opp. Bhaktidham Apartment, Bhuj, Gujarat 370001"

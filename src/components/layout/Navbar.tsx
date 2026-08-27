@@ -1,17 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { NAV_ITEMS } from "@/data/site-content";
-
-function scrollToId(id: string) {
-  const targetId = id === "work" ? "selected-work" : id;
-  const el = document.getElementById(targetId) || document.getElementById(id);
-  if (el) {
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (t: Element) => void } }).__lenis;
-    if (lenis) lenis.scrollTo(el);
-    else el.scrollIntoView({ behavior: "smooth" });
-  } else {
-    window.location.href = id === "home" ? "/" : `/#${targetId}`;
-  }
-}
 
 interface NavbarProps {
   activeNav?: string;
@@ -19,15 +8,21 @@ interface NavbarProps {
 
 export default function Navbar({ activeNav }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState(activeNav || "home");
+  const routerState = useRouterState({ select: (s) => s.location.pathname });
+  const isAboutPage = routerState === "/about";
+  const defaultActive = activeNav || (isAboutPage ? "about" : "home");
+  const [active, setActive] = useState(defaultActive);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navZIndex, setNavZIndex] = useState(50);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (activeNav) {
       setActive(activeNav);
+    } else if (isAboutPage) {
+      setActive("about");
     }
-  }, [activeNav]);
+  }, [activeNav, isAboutPage]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -87,18 +82,19 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
   }, []);
 
   useEffect(() => {
-    if (activeNav) return;
+    if (activeNav || isAboutPage) return;
 
     // Dynamic active state monitoring via IntersectionObserver
-    const sections = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(
-      Boolean,
-    ) as HTMLElement[];
+    const sections = NAV_ITEMS.map((item) =>
+      document.getElementById(item.id === "work" ? "selected-work" : item.id),
+    ).filter(Boolean) as HTMLElement[];
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.target.id) {
-            setActive(entry.target.id);
+            const mappedId = entry.target.id === "selected-work" ? "work" : entry.target.id;
+            setActive(mappedId);
           }
         });
       },
@@ -107,7 +103,56 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, [activeNav]);
+  }, [activeNav, isAboutPage]);
+
+  const handleNavClick = (id: string) => {
+    if (id === "about") {
+      if (routerState !== "/about") {
+        navigate({ to: "/about" });
+      } else {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      return;
+    }
+
+    if (id === "home") {
+      if (routerState !== "/") {
+        navigate({ to: "/" });
+      } else {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+        if (lenis) lenis.scrollTo(0);
+        else window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      return;
+    }
+
+    // For work, services
+    const targetId = id === "work" ? "selected-work" : id;
+    if (routerState !== "/") {
+      navigate({ to: "/", hash: targetId });
+    } else {
+      const el = document.getElementById(targetId) || document.getElementById(id);
+      if (el) {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: Element) => void } }).__lenis;
+        if (lenis) lenis.scrollTo(el);
+        else el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        navigate({ to: "/", hash: targetId });
+      }
+    }
+  };
+
+  const handleContactClick = () => {
+    if (routerState !== "/contact") {
+      navigate({ to: "/contact" });
+    } else {
+      const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+      if (lenis) lenis.scrollTo(0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const baseTransition =
     "width 500ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1), padding 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)";
@@ -137,8 +182,8 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
       {/* Left Zone: Logo */}
       <div className="flex shrink-0 items-center">
         <button
-          onClick={() => scrollToId("home")}
-          className="flex shrink-0 items-center gap-2 pr-2 text-left hover:opacity-80 transition-opacity focus:outline-none"
+          onClick={() => handleNavClick("home")}
+          className="flex shrink-0 items-center gap-2 pr-2 text-left hover:opacity-80 transition-opacity focus:outline-none cursor-pointer"
           aria-label="Skool Company, back to top"
         >
           <img src="/SkoolCo-Logo.png" alt="Skool Co. Logo" className="h-14 w-14 object-contain" />
@@ -150,10 +195,10 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
         {NAV_ITEMS.map((item) => (
           <button
             key={item.id}
-            onClick={() => scrollToId(item.id)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 focus:outline-none ${
+            onClick={() => handleNavClick(item.id)}
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 focus:outline-none cursor-pointer ${
               active === item.id
-                ? "bg-foreground/5 text-foreground"
+                ? "bg-foreground/5 text-foreground font-semibold"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -165,8 +210,8 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
       {/* Right Zone: CTA & Mobile Menu Toggle */}
       <div className="flex shrink-0 items-center gap-2">
         <button
-          onClick={() => scrollToId("contact")}
-          className="hidden shrink-0 items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] focus:outline-none md:inline-flex group"
+          onClick={handleContactClick}
+          className="hidden shrink-0 items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] focus:outline-none md:inline-flex group cursor-pointer"
         >
           say hello !
           <span
@@ -179,7 +224,7 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
 
         <button
           onClick={() => setMobileOpen((open) => !open)}
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background focus:outline-none focus:ring-2 focus:ring-ring md:hidden"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground text-background focus:outline-none focus:ring-2 focus:ring-ring md:hidden cursor-pointer"
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
         >
@@ -206,9 +251,13 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
                 key={item.id}
                 onClick={() => {
                   setMobileOpen(false);
-                  scrollToId(item.id);
+                  handleNavClick(item.id);
                 }}
-                className="rounded-2xl px-4 py-3 text-left font-display text-lg font-semibold text-foreground hover:bg-foreground/5 transition-all focus:outline-none"
+                className={`rounded-2xl px-4 py-3 text-left font-display text-lg transition-all focus:outline-none cursor-pointer ${
+                  active === item.id
+                    ? "bg-foreground/10 text-foreground font-bold"
+                    : "text-foreground hover:bg-foreground/5 font-semibold"
+                }`}
               >
                 {item.label}
               </button>
@@ -216,9 +265,9 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
             <button
               onClick={() => {
                 setMobileOpen(false);
-                scrollToId("contact");
+                handleContactClick();
               }}
-              className="mt-2 rounded-2xl bg-foreground px-4 py-3 text-center text-sm font-semibold text-background hover:opacity-90 active:scale-[0.99] transition-all focus:outline-none"
+              className="mt-2 rounded-2xl bg-foreground px-4 py-3 text-center text-sm font-semibold text-background hover:opacity-90 active:scale-[0.99] transition-all focus:outline-none cursor-pointer"
             >
               say hello !
             </button>
@@ -228,3 +277,4 @@ export default function Navbar({ activeNav }: NavbarProps = {}) {
     </div>
   );
 }
+

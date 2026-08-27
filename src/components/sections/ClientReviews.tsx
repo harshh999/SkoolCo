@@ -44,24 +44,20 @@ export default function ClientReviews() {
       >
         {/* Left Column */}
         <div>
-          <div className="inline-flex items-center gap-2 text-[13px] font-medium tracking-[0.08em] text-[#59636d] uppercase mb-[28px]">
-            <span className="w-2 h-2 rounded-full bg-[#4BB1AA]" />
-            <span>CLIENT REVIEWS</span>
-          </div>
           <h2
             className="text-[#20242a] font-semibold tracking-[-0.035em] leading-[1.12] max-w-[540px]"
             style={{
               fontSize: "clamp(42px, 4.2vw, 62px)",
             }}
           >
-            What people say about their home search
+            Trusted by the people we build for.
           </h2>
         </div>
 
         {/* Right Column */}
         <div className="md:justify-self-end pb-2">
           <p className="text-[#56616b] text-[18px] leading-[1.55] max-w-[430px]">
-            Real feedback from users who explored homes and found the right place with confidence.
+            Real words from the people and brands we've had the opportunity to work with.
           </p>
         </div>
       </div>

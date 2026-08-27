@@ -131,8 +131,7 @@ export default function Contact() {
                 </div>
                 <h3 className="font-display text-2xl font-bold text-foreground">Message Sent!</h3>
                 <p className="mt-3 max-w-[32ch] text-muted-foreground text-sm leading-relaxed">
-                  Thank you for reaching out to Skool Co. We will review your inquiry and get back
-                  to you within 24 hours.
+                  Thanks — we'll be in touch soon.
                 </p>
                 <button
                   onClick={() => setSubmitStatus("idle")}

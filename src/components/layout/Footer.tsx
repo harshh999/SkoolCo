@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "@tanstack/react-router";
 import { ArrowUpRight, Instagram, Linkedin, Facebook } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -112,7 +113,7 @@ export default function Footer() {
     <footer
       ref={footerRef}
       id="contact"
-      className="relative z-[1] w-full bg-[#222222] text-white select-none pt-16 sm:pt-20 pb-10 sm:pb-12 mt-0 overflow-hidden min-h-[60vh] flex flex-col justify-between rounded-t-[40px] md:rounded-t-[60px]"
+      className="sticky bottom-0 z-0 w-full bg-[#222222] text-white select-none pt-16 sm:pt-20 pb-10 sm:pb-12 mt-0 overflow-hidden min-h-[60vh] flex flex-col justify-between rounded-t-[40px] md:rounded-t-[60px]"
     >
       <div className="mx-auto px-6 sm:px-12 md:px-16 w-full max-w-[1400px] flex-1 flex flex-col justify-between h-full">
         {/* Top Section */}
@@ -120,12 +121,12 @@ export default function Footer() {
           <h2 className="text-[32px] md:text-[42px] lg:text-[48px] font-medium leading-[1.05] max-w-[450px]">
             This could be the start to something special.
           </h2>
-          <a
-            href="mailto:hello@skool.company"
+          <Link
+            to="/contact"
             className="inline-flex items-center justify-center px-8 py-3.5 rounded-md border border-[#6FB7BA] text-[#6FB7BA] hover:bg-[#6FB7BA] hover:text-[#222222] transition-colors duration-300 text-sm font-medium uppercase tracking-wider"
           >
             Write to us
-          </a>
+          </Link>
         </div>
 
         {/* Middle Section */}
@@ -162,7 +163,7 @@ export default function Footer() {
               href="tel:+91890405004"
               className="text-[17px] font-medium hover:text-[#6FB7BA] transition-colors mb-1.5"
             >
-              +91 8904 05004 / 6498
+              +91 8904 05004
             </a>
             <a
               href="mailto:hello@skool.company"

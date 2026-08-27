@@ -73,12 +73,14 @@ export default function MerchSection() {
     >
       <div className="mx-auto max-w-[980px] px-4 sm:px-6 md:px-0">
         {/* Section Heading */}
-        <h2
-          className="text-center text-[#4A4A4A] font-normal mb-[28px] text-[21px] sm:text-[26px] leading-tight"
-          style={{ fontFamily: "'Poppins', sans-serif" }}
-        >
-          Checkout our merch:
-        </h2>
+        <div className="text-center mb-[45px] px-5 sm:px-8">
+          <h2 className="text-[#20242a] font-semibold tracking-[-0.03em] text-[32px] sm:text-[40px] md:text-[48px] leading-[1.15]">
+            Things we've made.
+          </h2>
+          <p className="text-[#56616b] text-[16px] md:text-[18px] leading-[1.5] max-w-[460px] mx-auto mt-4">
+            Merch, objects and little things made for everyday spaces.
+          </p>
+        </div>
 
         {/* 3-Column by 2-Row Editorial Image Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-[14px]">
