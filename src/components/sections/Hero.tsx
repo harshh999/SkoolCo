@@ -3,19 +3,38 @@ import { gsap } from "gsap";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
+  const ellipseRef = useRef<SVGEllipseElement>(null);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      gsap.from("[data-anim='line']", {
-        y: 40,
-        opacity: 0,
-        duration: 1.0,
-        stagger: 0.15,
-        ease: "power4.out",
-      });
+      if (!reducedMotion) {
+        // Heading lines entrance
+        gsap.from("[data-anim='line']", {
+          y: 40,
+          opacity: 0,
+          duration: 1.0,
+          stagger: 0.15,
+          ease: "power4.out",
+        });
+
+        // Ellipse draw — getTotalLength() returns actual rendered perimeter
+        // so dasharray is always correct regardless of SVG scaling.
+        if (ellipseRef.current) {
+          const len = ellipseRef.current.getTotalLength();
+          gsap.set(ellipseRef.current, {
+            strokeDasharray: len,
+            strokeDashoffset: len,
+          });
+          gsap.to(ellipseRef.current, {
+            strokeDashoffset: 0,
+            duration: 1.5,
+            delay: 0.3,
+            ease: "power2.inOut",
+          });
+        }
+      }
     }, root);
 
     return () => ctx.revert();
@@ -31,41 +50,76 @@ export default function Hero() {
         {/* Headline Column */}
         <div className="w-full max-w-[860px] ml-4 md:ml-8 lg:ml-12">
           <h1 className="font-display leading-[0.95] tracking-[-0.03em] text-[#111111]">
-            {/* Line 1 */}
+
+            {/* ── Line 1: "Crafting brands" ── */}
             <span className="block overflow-visible m-0 p-0">
               <span
                 data-anim="line"
                 className="block overflow-visible m-0 p-0 lg:whitespace-nowrap font-medium text-[clamp(44px,9vw,56px)] md:text-[clamp(56px,8vw,72px)] lg:text-[clamp(68px,6vw,96px)]"
               >
-                <span className="relative inline-block whitespace-nowrap">
-                  <span className="relative z-10">Crafting</span>
+                {/*
+                  ┌─ Crafting wrapper ──────────────────────────────────────────┐
+                  │  position: relative + display: inline-block                 │
+                  │  overflow: visible so the absolute SVG escapes without clip │
+                  └────────────────────────────────────────────────────────────┘
+                */}
+                <span
+                  style={{
+                    position: "relative",
+                    display: "inline-block",
+                    overflow: "visible",
+                  }}
+                >
+                  {/* Text sits on z-index 1, above the annotation */}
+                  <span style={{ position: "relative", zIndex: 1 }}>Crafting</span>
+
+                  {/*
+                    ┌─ SVG overlay ───────────────────────────────────────────────────┐
+                    │  Absolutely positioned, extending 25 px outside on every side.  │
+                    │  width / height written as calc() so it adapts to any font size. │
+                    │  overflow="visible" on the SVG guarantees the stroke cap         │
+                    │  is never clipped by the SVG's own bounding box.                │
+                    │                                                                  │
+                    │  NO viewBox / preserveAspectRatio — the ellipse uses %          │
+                    │  units so it scales with the SVG's own pixel dimensions.        │
+                    │  vectorEffect="non-scaling-stroke" keeps stroke-width at 3 px   │
+                    │  regardless of how the SVG is scaled.                           │
+                    └────────────────────────────────────────────────────────────────┘
+                  */}
                   <svg
-                    className="absolute pointer-events-none overflow-visible -rotate-3 z-0 opacity-95"
+                    aria-hidden="true"
                     style={{
-                      top: "-22px",
-                      left: "-28px",
-                      width: "calc(100% + 56px)",
-                      height: "calc(100% + 44px)",
+                      position: "absolute",
+                      top: "-25px",
+                      left: "-25px",
+                      width: "calc(100% + 50px)",
+                      height: "calc(100% + 50px)",
+                      zIndex: 0,
+                      pointerEvents: "none",
+                      overflow: "visible",
+                      transform: "rotate(-2deg)",
                     }}
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
+                    overflow="visible"
                   >
-                    <path
-                      d="M 50 2 C 22 0, 2 15, 2 50 C 2 85, 25 98, 50 98 C 78 98, 98 82, 98 50 C 98 18, 75 4, 50 2 Z"
-                      stroke="#4BB1AA"
-                      strokeWidth="4"
+                    <ellipse
+                      ref={ellipseRef}
+                      cx="50%"
+                      cy="50%"
+                      rx="48%"
+                      ry="42%"
                       fill="none"
+                      stroke="#6FA9AA"
+                      strokeWidth="3"
                       strokeLinecap="round"
-                      strokeLinejoin="round"
                       vectorEffect="non-scaling-stroke"
                     />
                   </svg>
-                </span>{" "}
-                brands
+                </span>
+                {" "}brands
               </span>
             </span>
 
-            {/* Line 2 */}
+            {/* ── Line 2 ── */}
             <span className="block overflow-visible m-0 p-0">
               <span
                 data-anim="line"
@@ -75,7 +129,7 @@ export default function Hero() {
               </span>
             </span>
 
-            {/* Line 3 */}
+            {/* ── Line 3 ── */}
             <span className="block overflow-visible m-0 p-0">
               <span
                 data-anim="line"
@@ -87,10 +141,8 @@ export default function Hero() {
           </h1>
         </div>
 
-        {/* SVG Column Reservation */}
-        <div className="relative hidden lg:flex items-center justify-center">
-          {/* Space reserved for visual element */}
-        </div>
+        {/* Right column — reserved for visual element */}
+        <div className="relative hidden lg:flex items-center justify-center" />
       </div>
     </section>
   );
