@@ -12,8 +12,8 @@ export const submitContactForm = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { name, email, company, phone, projectType, message } = data;
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || "hello@skool.company";
+    const apiKey = process.env["RESEND_API_KEY"];
+    const receiverEmail = process.env["CONTACT_RECEIVER_EMAIL"] || "hello@skool.company";
 
     // Re-verify on server-side
     console.info(`[Server Function - Contact Form Log]

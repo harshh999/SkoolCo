@@ -19,21 +19,23 @@ export default function BrandStatement() {
       gsap.fromTo(
         words,
         {
-          filter: "blur(12px)",
-          opacity: 0.28,
+          opacity: 0.3,
+          filter: "blur(9px)",
         },
         {
-          filter: "blur(0px)",
           opacity: 1,
-          stagger: 0.2,
-          ease: "power1.inOut",
+          filter: "blur(0px)",
+          duration: 1,
+          stagger: 0.8, // slight overlap
+          ease: "none",
           scrollTrigger: {
-            trigger: root.current,
-            start: "top 75%",
-            end: "bottom 85%",
-            scrub: 1,
+            trigger: textRef.current,
+            start: "top 80%",
+            end: "top 30%",
+            scrub: 0.5,
+            once: false,
           },
-        }
+        },
       );
     }, root);
     return () => ctx.revert();
@@ -44,18 +46,15 @@ export default function BrandStatement() {
       ref={root}
       className="flex flex-col items-center justify-center w-full"
       style={{
-        backgroundColor: "#f3f1e9",
-        minHeight: "100vh",
-        padding: "clamp(100px, 12vw, 180px) 48px",
+        backgroundColor: "#FAF9F6",
+        minHeight: "80vh",
+        paddingTop: "clamp(100px, 12vw, 180px)",
+        paddingBottom: "clamp(50px, 6vw, 90px)",
+        paddingLeft: "48px",
+        paddingRight: "48px",
       }}
     >
-      <div className="mx-auto w-full max-w-[1000px] flex flex-col items-center text-center">
-        <span
-          className="text-xs uppercase tracking-[0.2em] font-medium mb-12 sm:mb-16 lg:mb-20"
-          style={{ color: "#1d232b" }}
-        >
-          OUR BELIEF
-        </span>
+      <div className="mx-auto w-full max-w-[1000px] flex flex-col items-center">
         <p
           ref={textRef}
           className="text-center font-sans font-normal leading-[1.28] tracking-[-0.035em]"
@@ -66,7 +65,9 @@ export default function BrandStatement() {
         >
           {TEXT.split(" ").map((w, i) => {
             const cleanWord = w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase();
-            const isItalic = ["discovery", "attention", "culture", "people", "confidence"].includes(cleanWord);
+            const isItalic = ["discovery", "attention", "culture", "people", "confidence"].includes(
+              cleanWord,
+            );
             return (
               <span
                 key={`${w}-${i}`}

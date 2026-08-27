@@ -334,7 +334,7 @@
 "url": "https://in.linkedin.com/company/skoolcompany"
 }
 ],
-"copyright": "© 2024, Designed with ♡ by Skool Company",
+"copyright": "© 2026, Designed with ♡ by Skool Company",
 "back_to_top": {
 "text": "Psst! Free ride to top",
 "behavior": "Smooth scroll back to the hero."

@@ -31,7 +31,7 @@ function FeaturedCard({ id, brandName, image, className }: FeaturedCardProps) {
       {/* Brand Label Wrapper - Full height flex container with justify-end */}
       <div className="relative w-full h-full pointer-events-none flex flex-col justify-end p-[16px] md:p-[32px] md:pl-[40px] md:pb-[32px] min-h-inherit">
         <span
-          className="sticky bottom-[20px] md:bottom-[32px] self-start text-[14px] md:text-[16px] font-medium tracking-[0.01em] text-white z-10 uppercase select-none pointer-events-auto"
+          className="sticky bottom-[20px] md:bottom-[32px] self-start text-[28px] sm:text-[36px] md:text-[42px] font-medium tracking-[0.01em] text-white z-10 uppercase select-none pointer-events-auto"
           style={{
             textShadow: "0 2px 12px rgba(0,0,0,0.25)",
           }}

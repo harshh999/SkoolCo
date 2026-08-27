@@ -73,7 +73,7 @@ export default function Services() {
       </div>
 
       {/* Accordion Container (Horizontal on Desktop, Vertical on Mobile) */}
-      <div className="w-full flex flex-col md:flex-row gap-4 md:gap-5 h-auto md:h-[580px] lg:h-[650px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+      <div className="w-full flex flex-col xl:flex-row gap-3 xl:gap-4 h-auto xl:h-[650px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden">
         {SERVICES_DATA.map((service) => {
           const isActive = activeId === service.id;
 
@@ -83,8 +83,8 @@ export default function Services() {
               onClick={() => setActiveId(service.id)}
               className={`group cursor-pointer rounded-[24px] overflow-hidden transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col justify-between ${
                 isActive
-                  ? "bg-[#0b0d10] text-white md:flex-[3.5] p-6 sm:p-8 lg:p-10 shadow-2xl"
-                  : "bg-[#efefed] hover:bg-[#e6e6e3] text-[#20252b] md:flex-1 p-6 md:p-7"
+                  ? "bg-[#0b0d10] text-white xl:flex-[3.5] xl:min-w-[clamp(380px,38vw,580px)] p-[24px_20px] xl:p-[32px] shadow-2xl min-h-[580px] xl:min-h-[650px]"
+                  : "bg-[#efefed] hover:bg-[#e6e6e3] text-[#20252b] xl:flex-[1_1_0] w-full min-w-[unset] xl:min-w-0 p-[24px_20px] xl:p-[28px_16px] min-h-[auto] xl:min-h-[650px]"
               }`}
             >
               {/* Top Row: Number Only */}
@@ -96,7 +96,8 @@ export default function Services() {
                       : "text-[#4BB1AA] text-[clamp(44px,4vw,80px)]"
                   }`}
                   style={{
-                    transition: "color 300ms ease-in-out, font-size 600ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    transition:
+                      "color 300ms ease-in-out, font-size 600ms cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
                 >
                   {service.number}
@@ -104,12 +105,14 @@ export default function Services() {
               </div>
 
               {/* Middle Content: Title */}
-              <div className={`my-4 md:my-0 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]`}>
+              <div
+                className={`my-4 xl:my-0 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]`}
+              >
                 <h3
                   className={`font-display font-medium leading-[1.1] tracking-[-0.03em] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
-                      ? "text-white text-[clamp(26px,2.8vw,48px)] max-w-full md:max-w-[70%] lg:max-w-[60%]"
-                      : "text-[#20252b] text-[18px] md:text-[20px] font-semibold line-clamp-2 md:line-clamp-3"
+                      ? "text-white text-[clamp(26px,2.8vw,48px)] w-full whitespace-normal"
+                      : "text-[#20252b] text-[18px] md:text-[20px] font-semibold whitespace-normal break-words overflow-visible"
                   }`}
                 >
                   {service.title}
@@ -120,7 +123,7 @@ export default function Services() {
               <div
                 className={`w-full overflow-hidden rounded-[16px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   isActive
-                    ? "h-[200px] sm:h-[240px] md:h-[260px] lg:h-[320px] opacity-100 mt-6 scale-100"
+                    ? "h-[200px] sm:h-[240px] md:h-[260px] lg:h-[320px] opacity-100 mt-6 scale-100 shrink-0"
                     : "h-0 opacity-0 mt-0 scale-95 pointer-events-none"
                 }`}
               >
@@ -138,4 +141,3 @@ export default function Services() {
     </section>
   );
 }
-

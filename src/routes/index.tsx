@@ -12,8 +12,10 @@ import SelectedWork from "@/components/sections/SelectedWork";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
 import Services from "@/components/sections/Services";
 import CinematicTransition from "@/components/sections/CinematicTransition";
-import About from "@/components/sections/About";
-import Contact from "@/components/sections/Contact";
+import ClientReviews from "@/components/sections/ClientReviews";
+import InstagramFeed from "@/components/sections/InstagramFeed";
+import MerchSection from "@/components/sections/MerchSection";
+import FAQSection from "@/components/sections/FAQSection";
 
 const TITLE = "Skool Company — Independent Creative Company";
 const DESC =
@@ -64,18 +66,22 @@ function Index() {
   }, []);
 
   return (
-    <main className="relative w-full overflow-x-clip">
+    <main className="relative w-full min-h-screen">
       <Navbar />
-      <Hero />
-      <FeaturedVisual />
-      <BrandStatement />
-      <ClientsMarquee />
-      <SelectedWork />
-      <FeaturedProjects />
-      <Services />
-      <CinematicTransition />
-      <About />
-      <Contact />
+      <div className="main-content-sheet">
+        <Hero />
+        <FeaturedVisual />
+        <BrandStatement />
+        <ClientsMarquee />
+        <SelectedWork />
+        <FeaturedProjects />
+        <Services />
+        <CinematicTransition />
+        <ClientReviews />
+        <InstagramFeed />
+        <MerchSection />
+        <FAQSection />
+      </div>
       <Footer />
     </main>
   );

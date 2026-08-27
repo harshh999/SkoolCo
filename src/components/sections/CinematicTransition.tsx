@@ -1,109 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const STRIP_ITEMS = [
-  "TRAILERS",
-  "SHORT FILMS",
-  "ANIMATIONS",
-  "SOCIAL GRAPHICS",
-  "COMMERCIALS",
-];
-
-const ROTATING_WORDS = [
-  "pitched",
-  "scrapped",
-  "debated",
-  "approved",
-  "overthought",
-  "brewed",
-];
-
-function RotatingHeadline() {
-  const [currentIdx, setCurrentIdx] = useState(0);
-  const [prevIdx, setPrevIdx] = useState<number | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    // Timing schedule for the 10-second cycle:
-    // pitched (1400ms) -> scrapped (1400ms) -> debated (1400ms) ->
-    // approved (1400ms) -> overthought (1400ms) -> brewed (stays static 3000ms until 10s) -> loop resets to pitched
-    const stepDelays = [1400, 1400, 1400, 1400, 1400, 3000];
-    let step = 0;
-    let timerId: ReturnType<typeof setTimeout>;
-    let animEndTimerId: ReturnType<typeof setTimeout>;
-
-    const scheduleNext = () => {
-      const delay = stepDelays[step];
-      timerId = setTimeout(() => {
-        const next = (step + 1) % ROTATING_WORDS.length;
-        setPrevIdx(step);
-        setCurrentIdx(next);
-        setIsAnimating(true);
-        step = next;
-
-        animEndTimerId = setTimeout(() => {
-          setIsAnimating(false);
-          setPrevIdx(null);
-        }, 460);
-
-        scheduleNext();
-      }, delay);
-    };
-
-    scheduleNext();
-
-    return () => {
-      clearTimeout(timerId);
-      clearTimeout(animEndTimerId);
-    };
-  }, []);
-
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4 md:px-8 text-center select-none">
-      <h2
-        className="font-display font-medium text-white tracking-[-0.03em] leading-none inline-flex flex-wrap items-center justify-center"
-        style={{
-          fontSize: "clamp(30px, 4.2vw, 84px)",
-          textShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
-        }}
-      >
-        <span>Great ideas</span>
-        <span className="inline-grid grid-cols-1 grid-rows-1 overflow-hidden h-[1.2em] relative align-bottom mx-2 sm:mx-3 md:mx-4">
-          {prevIdx !== null && (
-            <span
-              key={`prev-${prevIdx}`}
-              className="col-start-1 row-start-1 text-white animate-word-out whitespace-nowrap will-change-[transform,opacity]"
-            >
-              {ROTATING_WORDS[prevIdx]}
-            </span>
-          )}
-          <span
-            key={`curr-${currentIdx}`}
-            className={`col-start-1 row-start-1 text-white whitespace-nowrap will-change-[transform,opacity] ${
-              isAnimating ? "animate-word-in" : ""
-            }`}
-          >
-            {ROTATING_WORDS[currentIdx]}
-          </span>
-        </span>
-        <span>daily.</span>
-      </h2>
-    </div>
-  );
-}
+const STRIP_ITEMS = ["TRAILERS", "SHORT FILMS", "ANIMATIONS", "SOCIAL GRAPHICS", "COMMERCIALS"];
 
 function MarqueeSequence() {
   return (
     <div className="flex items-center shrink-0">
       {STRIP_ITEMS.map((item, index) => (
         <span key={index} className="flex items-center shrink-0">
-          <span className="font-display font-medium text-foreground tracking-[-0.03em] text-[clamp(28px,3vw,54px)] uppercase whitespace-nowrap">
+          <span className="font-display font-medium text-[#4A4A4A] tracking-[-0.03em] text-[clamp(28px,3vw,54px)] uppercase whitespace-nowrap">
             {item}
           </span>
-          <span className="w-2.5 h-2.5 rounded-full bg-rect shrink-0 mx-6 sm:mx-8 md:mx-12" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#4BB1AA] shrink-0 mx-6 sm:mx-8 md:mx-12" />
         </span>
       ))}
     </div>
@@ -112,45 +23,59 @@ function MarqueeSequence() {
 
 export default function CinematicTransition() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const pinRef = useRef<HTMLDivElement>(null);
   const videoWrapperRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      if (!pinRef.current || !videoWrapperRef.current || !containerRef.current) return;
+      if (!videoWrapperRef.current || !containerRef.current || !videoRef.current) return;
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top top",
-          end: "bottom bottom",
+          start: "top bottom",
+          end: "bottom center",
           scrub: 1,
-          pin: pinRef.current,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
 
+      // Video card wrapper expansion animation
       tl.fromTo(
         videoWrapperRef.current,
         {
-          width: "min(42vw, 720px)",
-          minWidth: "600px",
-          aspectRatio: "16 / 9",
-          height: "auto",
+          width: "27vw",
+          maxWidth: "490px",
           borderRadius: "28px",
           scale: 1,
-          opacity: 1,
         },
         {
-          width: "calc(100vw - 80px)",
-          minWidth: "calc(100vw - 80px)",
-          maxWidth: "none",
-          aspectRatio: "16 / 9",
+          width: "78vw",
+          maxWidth: "1440px",
           borderRadius: "28px",
-          ease: "power2.out",
+          scale: 1,
+          ease: "power1.out",
+          duration: 0.7,
         },
+        0,
       );
+
+      // Inner video progressive zoom animation
+      tl.fromTo(
+        videoRef.current,
+        {
+          scale: 1.08,
+        },
+        {
+          scale: 1.35,
+          ease: "none", // linear interpolation
+          duration: 0.7,
+        },
+        0,
+      );
+
+      // Pad the timeline to 1.0 so the wrapper and video stay at final state for the remaining 30% of scroll
+      tl.to({}, { duration: 0.3 }, 0.7);
     }, containerRef);
 
     return () => ctx.revert();
@@ -160,59 +85,49 @@ export default function CinematicTransition() {
     <section
       ref={containerRef}
       id="cinematic-transition"
-      className="relative z-10 w-full bg-background h-[200vh] -mt-1 overflow-hidden"
+      className="relative z-10 w-full bg-background pt-16 md:pt-24 pb-0 m-0 overflow-hidden flex flex-col items-center justify-center"
     >
-      {/* Pinned Viewport Container */}
-      <div
-        ref={pinRef}
-        className="sticky top-0 w-full h-screen flex items-center justify-center overflow-hidden"
-      >
-        {/* Animated Horizontal Typography Strip (z-1) */}
-        <div className="absolute inset-x-0 w-full h-[100px] md:h-[130px] border-t border-b border-border/80 flex items-center overflow-hidden z-[1] select-none pointer-events-none">
-          <div className="marquee-left-track flex w-max items-center">
-            <div className="flex items-center shrink-0">
-              <MarqueeSequence />
-              <MarqueeSequence />
-              <MarqueeSequence />
-              <MarqueeSequence />
-            </div>
-            <div className="flex items-center shrink-0">
-              <MarqueeSequence />
-              <MarqueeSequence />
-              <MarqueeSequence />
-              <MarqueeSequence />
-            </div>
+      {/* Animated Horizontal Typography Strip (z-1) - Centered absolute behind the video */}
+      <div className="absolute inset-x-0 w-full h-[100px] md:h-[130px] border-t border-b border-border/80 flex items-center overflow-hidden z-[1] select-none pointer-events-none top-1/2 -translate-y-1/2">
+        <div className="marquee-left-track flex w-max items-center">
+          <div className="flex items-center shrink-0">
+            <MarqueeSequence />
+            <MarqueeSequence />
+            <MarqueeSequence />
+            <MarqueeSequence />
+          </div>
+          <div className="flex items-center shrink-0">
+            <MarqueeSequence />
+            <MarqueeSequence />
+            <MarqueeSequence />
+            <MarqueeSequence />
           </div>
         </div>
+      </div>
 
-        {/* Centered Expanding Video Container (z-2) */}
-        <div
-          ref={videoWrapperRef}
-          className="relative z-[2] aspect-video overflow-hidden shadow-2xl bg-[#111111] will-change-[width,border-radius]"
-          style={{
-            width: "min(42vw, 720px)",
-            minWidth: "600px",
-            aspectRatio: "16 / 9",
-            height: "auto",
-            borderRadius: "28px",
-            boxShadow: "0 28px 70px -15px rgba(0,0,0,0.28)",
-          }}
-        >
-          {/* Subtle Dark Contrast Overlay */}
-          <div className="absolute inset-0 bg-black/[0.18] pointer-events-none z-[5]" />
-
-          {/* Animated Rotating Text Overlay */}
-          <RotatingHeadline />
-
-          <video
-            src="/breather.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-          />
-        </div>
+      {/* Centered Expanding Video Card Container (z-2) */}
+      <div
+        ref={videoWrapperRef}
+        className="relative z-[2] aspect-video overflow-hidden shadow-2xl bg-[#111111] will-change-[width,height,transform,border-radius]"
+        style={{
+          width: "27vw",
+          maxWidth: "490px",
+          aspectRatio: "16 / 9",
+          height: "auto",
+          borderRadius: "28px",
+          transformOrigin: "center center",
+          boxShadow: "0 28px 70px -15px rgba(0,0,0,0.35)",
+        }}
+      >
+        <video
+          ref={videoRef}
+          src="/breather.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover block rounded-[inherit] will-change-transform"
+        />
       </div>
     </section>
   );

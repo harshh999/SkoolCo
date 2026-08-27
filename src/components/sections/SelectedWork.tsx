@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,30 +9,35 @@ const PROJECTS_DATA = [
   {
     number: "01 / 05",
     name: "Project One",
+    slug: "project-one",
     category: "Brand Identity & Digital",
     image: "/images/selected-work/project-1.jpg",
   },
   {
     number: "02 / 05",
     name: "Project Two",
+    slug: "project-two",
     category: "Architecture & Interiors",
     image: "/images/selected-work/project-2.jpg",
   },
   {
     number: "03 / 05",
     name: "Project Three",
+    slug: "project-three",
     category: "Digital Experience",
     image: "/images/selected-work/project-3.jpg",
   },
   {
     number: "04 / 05",
     name: "Project Four",
+    slug: "project-four",
     category: "Creative Direction",
     image: "/images/selected-work/project-4.jpg",
   },
   {
     number: "05 / 05",
     name: "Project Five",
+    slug: "project-five",
     category: "Creative Direction",
     image: "/images/selected-work/project-5.jpg",
   },
@@ -44,12 +50,13 @@ export default function SelectedWork() {
     const ctx = gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>(".project-panel");
       panels.forEach((panel, i) => {
-        if (i < panels.length - 1) {
+        const nextPanel = panels[i + 1];
+        if (nextPanel) {
           gsap.to(panel, {
             scale: 0.94,
             ease: "none",
             scrollTrigger: {
-              trigger: panels[i + 1],
+              trigger: nextPanel,
               start: "top bottom",
               end: "top top",
               scrub: true,
@@ -66,17 +73,11 @@ export default function SelectedWork() {
       {/* 2-Column Intro Section */}
       <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 justify-between items-end border-t border-border px-6 pt-[70px] pb-[50px] md:px-[8vw] md:pt-[80px] md:pb-[60px] lg:px-[12vw] lg:pt-[120px] lg:pb-[80px]">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-rect shrink-0 animate-pulse" />
-            <span className="text-[12px] font-medium tracking-[0.14em] text-muted-foreground uppercase font-sans">
-              SELECTED WORK
-            </span>
-          </div>
           <h2
             className="font-display font-medium leading-[1.05] tracking-[-0.04em] text-foreground"
-            style={{ fontSize: "clamp(42px, 5vw, 82px)", maxWidth: "800px" }}
+            style={{ fontSize: "clamp(42px, 5vw, 82px)", maxWidth: "650px" }}
           >
-            Selected work, made to be noticed.
+            Ideas brought to life.
           </h2>
         </div>
         <div className="md:justify-self-end">
@@ -84,7 +85,7 @@ export default function SelectedWork() {
             className="text-muted-foreground leading-relaxed text-left md:text-right max-w-[420px]"
             style={{ fontSize: "clamp(16px, 1.2vw, 20px)", opacity: 0.75 }}
           >
-            A selection of digital experiences crafted for brands that care about how they are seen, felt and remembered.
+            A selection of digital experiences, identities and campaigns created to help ambitious brands stand apart.
           </p>
         </div>
       </div>
@@ -117,7 +118,8 @@ export default function SelectedWork() {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.35) 100%)",
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.35) 100%)",
                 }}
               />
               {/* Content Card */}
@@ -139,14 +141,15 @@ export default function SelectedWork() {
                   >
                     {proj.name}
                   </h3>
-                  <p className="text-[15px] text-white/72 mt-3 font-sans">
-                    {proj.category}
-                  </p>
-                  <button
-                    className="mt-7 px-[22px] py-[14px] bg-[#f5f3ee] text-[#161616] text-[12px] font-bold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white active:scale-95 uppercase tracking-wider font-sans cursor-pointer"
+                  <p className="text-[15px] text-white/72 mt-3 font-sans">{proj.category}</p>
+                  <Link
+                    to="/work/$slug"
+                    params={{ slug: proj.slug }}
+                    className="mt-7 px-[22px] py-[14px] bg-[#f5f3ee] text-[#161616] text-[12px] font-bold rounded-full transition-all duration-300 hover:scale-105 hover:bg-white active:scale-95 uppercase tracking-wider font-sans cursor-pointer inline-flex items-center justify-center gap-1.5"
                   >
-                    VIEW PROJECT ↗
-                  </button>
+                    <span>VIEW PROJECT</span>
+                    <span>↗</span>
+                  </Link>
                 </div>
               </div>
             </div>

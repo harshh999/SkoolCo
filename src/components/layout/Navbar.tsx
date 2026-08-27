@@ -2,18 +2,32 @@ import { useEffect, useState, useRef } from "react";
 import { NAV_ITEMS } from "@/data/site-content";
 
 function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const lenis = (window as unknown as { __lenis?: { scrollTo: (t: Element) => void } }).__lenis;
-  if (lenis) lenis.scrollTo(el);
-  else el.scrollIntoView({ behavior: "smooth" });
+  const targetId = id === "work" ? "selected-work" : id;
+  const el = document.getElementById(targetId) || document.getElementById(id);
+  if (el) {
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (t: Element) => void } }).__lenis;
+    if (lenis) lenis.scrollTo(el);
+    else el.scrollIntoView({ behavior: "smooth" });
+  } else {
+    window.location.href = id === "home" ? "/" : `/#${targetId}`;
+  }
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  activeNav?: string;
+}
+
+export default function Navbar({ activeNav }: NavbarProps = {}) {
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState("home");
+  const [active, setActive] = useState(activeNav || "home");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navZIndex, setNavZIndex] = useState(50);
+
+  useEffect(() => {
+    if (activeNav) {
+      setActive(activeNav);
+    }
+  }, [activeNav]);
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -73,6 +87,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (activeNav) return;
+
     // Dynamic active state monitoring via IntersectionObserver
     const sections = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(
       Boolean,
@@ -91,10 +107,11 @@ export default function Navbar() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [activeNav]);
 
-  const baseTransition = "width 500ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1), padding 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)";
-  
+  const baseTransition =
+    "width 500ms cubic-bezier(0.22, 1, 0.36, 1), border-radius 500ms cubic-bezier(0.22, 1, 0.36, 1), padding 500ms cubic-bezier(0.22, 1, 0.36, 1), background 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1)";
+
   const transformStyle = "translateX(-50%) translateY(0)";
 
   return (
