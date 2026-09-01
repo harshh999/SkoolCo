@@ -119,9 +119,18 @@ export const SOCIAL_LINKS: SocialLink[] = [
 ];
 
 export const CONTACT_DETAILS = {
-  phone: "+91 89804 05004",
-  phoneLink: "tel:+918980405004",
+  phone: "+91 8904 05004",
+  phoneLink: "tel:+91890405004",
   email: "hello@skool.company",
   emailLink: "mailto:hello@skool.company",
-  address: "Skool Co., Banker's Colony, Opp. Bhaktidham Apartment, Bhuj, Gujarat 370001",
+  locations: {
+    ahmedabad: {
+      label: "AHMEDABAD",
+      address: "614, Shilp Epitome, Rajpath Rangoli Rd, Sindhubhavan Rd, Ahmedabad, Gujarat 380059",
+    },
+    bhuj: {
+      label: "BHUJ",
+      address: "Skool Co., Banker’s Colony, Opp. Bhaktidham Apartment, Bhuj, Gujarat 370001",
+    },
+  },
 };

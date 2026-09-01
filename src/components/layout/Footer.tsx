@@ -110,11 +110,12 @@ export default function Footer() {
   };
 
   return (
-    <footer
-      ref={footerRef}
-      id="contact"
-      className="sticky bottom-0 z-0 w-full bg-[#222222] text-white select-none pt-16 sm:pt-20 pb-10 sm:pb-12 mt-0 overflow-hidden min-h-[60vh] flex flex-col justify-between rounded-t-[40px] md:rounded-t-[60px]"
-    >
+    <div className="sticky bottom-0 z-0 w-full bg-[#222222]">
+      <footer
+        ref={footerRef}
+        id="contact"
+        className="w-full bg-[#222222] text-white select-none pt-16 sm:pt-20 pb-10 sm:pb-12 mt-0 overflow-hidden min-h-[60vh] flex flex-col justify-between rounded-t-[40px] md:rounded-t-[60px]"
+      >
       <div className="mx-auto px-6 sm:px-12 md:px-16 w-full max-w-[1400px] flex-1 flex flex-col justify-between h-full">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-16">
@@ -280,6 +281,7 @@ export default function Footer() {
           <div className="text-white/40 text-[13px]">© 2026, Designed with ♡ by Skool Company</div>
         </div>
       </div>
-    </footer>
+      </footer>
+    </div>
   );
 }

@@ -110,11 +110,19 @@ export default function Contact() {
                   {CONTACT_DETAILS.email}
                 </a>
               </div>
-              <div>
-                <p className="eyebrow">Let's discuss ideas</p>
-                <address className="mt-3 max-w-[36ch] not-italic leading-relaxed text-muted-foreground">
-                  {CONTACT_DETAILS.address}
-                </address>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
+                <div>
+                  <p className="eyebrow">{CONTACT_DETAILS.locations.ahmedabad.label}</p>
+                  <address className="mt-3 not-italic leading-relaxed text-muted-foreground">
+                    {CONTACT_DETAILS.locations.ahmedabad.address}
+                  </address>
+                </div>
+                <div>
+                  <p className="eyebrow">{CONTACT_DETAILS.locations.bhuj.label}</p>
+                  <address className="mt-3 not-italic leading-relaxed text-muted-foreground">
+                    {CONTACT_DETAILS.locations.bhuj.address}
+                  </address>
+                </div>
               </div>
             </div>
           </div>

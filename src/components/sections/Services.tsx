@@ -6,6 +6,7 @@ interface ServiceItem {
   label: string;
   title: string;
   image: string;
+  visual?: string;
 }
 
 const SERVICES_DATA: ServiceItem[] = [
@@ -15,6 +16,7 @@ const SERVICES_DATA: ServiceItem[] = [
     label: "Strategy & Identity",
     title: "Brand Strategy & Identity Design",
     image: "/images/services/strategy.jpg",
+    visual: "/images/services/brand-strategy-visual.png",
   },
   {
     id: 2,
@@ -22,6 +24,7 @@ const SERVICES_DATA: ServiceItem[] = [
     label: "Advertising",
     title: "Advertising & Production",
     image: "/images/services/advertising.jpg",
+    visual: "/images/services/advertising-visual.png",
   },
   {
     id: 3,
@@ -29,6 +32,7 @@ const SERVICES_DATA: ServiceItem[] = [
     label: "Digital Design",
     title: "UI & Website Design",
     image: "/images/services/digital.jpg",
+    visual: "/images/services/digital-visual.png",
   },
   {
     id: 4,
@@ -36,6 +40,7 @@ const SERVICES_DATA: ServiceItem[] = [
     label: "Visualisation",
     title: "CGI & Walkthroughs",
     image: "/images/services/cgi.jpg",
+    visual: "/images/services/cgi-visual.png",
   },
   {
     id: 5,
@@ -43,6 +48,7 @@ const SERVICES_DATA: ServiceItem[] = [
     label: "Marketing",
     title: "Social Media Marketing",
     image: "/images/services/marketing.jpg",
+    visual: "/images/services/marketing-visual.png",
   },
 ];
 
@@ -67,7 +73,7 @@ export default function Services() {
       </div>
 
       {/* Accordion Container (Horizontal on Desktop, Vertical on Mobile) */}
-      <div className="w-full flex flex-col xl:flex-row gap-3 xl:gap-4 h-auto xl:h-[650px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden">
+      <div className="w-full flex flex-col xl:flex-row gap-3 xl:gap-4 h-auto xl:h-[570px] min-[1440px]:h-[650px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] overflow-hidden">
         {SERVICES_DATA.map((service) => {
           const isActive = activeId === service.id;
 
@@ -75,18 +81,36 @@ export default function Services() {
             <div
               key={service.id}
               onClick={() => setActiveId(service.id)}
-              className={`group cursor-pointer rounded-[24px] overflow-hidden transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col justify-between ${
+              className={`relative group cursor-pointer rounded-[24px] overflow-hidden transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col justify-between ${
                 isActive
-                  ? "bg-[#0b0d10] text-white xl:flex-[3.5] xl:min-w-[clamp(380px,38vw,580px)] p-[24px_20px] xl:p-[32px] shadow-2xl min-h-[580px] xl:min-h-[650px]"
-                  : "bg-[#efefed] hover:bg-[#e6e6e3] text-[#20252b] xl:flex-[1_1_0] w-full min-w-[unset] xl:min-w-0 p-[24px_20px] xl:p-[28px_16px] min-h-[auto] xl:min-h-[650px]"
+                  ? "bg-[#0b0d10] text-white xl:flex-[2.4] min-[1440px]:flex-[3.8] xl:min-w-[320px] min-[1440px]:min-w-[clamp(380px,38vw,580px)] p-[24px_20px] xl:p-[28px] min-[1440px]:p-[32px] shadow-2xl min-h-[580px] xl:min-h-[570px] min-[1440px]:min-h-[650px]"
+                  : "bg-[#efefed] hover:bg-[#e6e6e3] text-[#20252b] xl:flex-[1_1_0] w-full min-w-[unset] xl:min-w-0 p-[24px_20px] xl:p-[20px_10px] min-[1440px]:p-[28px_16px] min-h-[auto] xl:min-h-[570px] min-[1440px]:min-h-[650px]"
               }`}
             >
-              {/* Top Row: Number Only */}
-              <div className="w-full flex items-start justify-end gap-4">
+              {/* Top Row: Decorative Visual & Number */}
+              <div className="relative z-10 w-full flex items-start justify-between gap-4">
+                {service.visual ? (
+                  <div
+                    className={`transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isActive
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-90 pointer-events-none hidden"
+                    }`}
+                  >
+                    <img
+                      src={service.visual}
+                      alt={`${service.title} Visual`}
+                      className="w-[75px] sm:w-[85px] xl:w-[85px] min-[1440px]:w-[95px] h-[75px] sm:h-[85px] xl:h-[85px] min-[1440px]:h-[95px] max-w-[100px] max-h-[100px] object-contain pointer-events-none select-none"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : (
+                  <div />
+                )}
                 <span
                   className={`font-display leading-none font-medium select-none ${
                     isActive
-                      ? "text-[#FFFFFF] text-[clamp(54px,5.5vw,100px)]"
+                      ? "text-[#FFFFFF] text-[clamp(46px,4.8vw,86px)]"
                       : "text-[#4BB1AA] text-[clamp(44px,4vw,80px)]"
                   }`}
                   style={{
@@ -100,13 +124,13 @@ export default function Services() {
 
               {/* Middle Content: Title */}
               <div
-                className={`my-4 xl:my-0 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]`}
+                className={`relative z-10 my-4 xl:my-0 transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]`}
               >
                 <h3
                   className={`font-display font-medium leading-[1.1] tracking-[-0.03em] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
                       ? "text-white text-[clamp(26px,2.8vw,48px)] w-full whitespace-normal"
-                      : "text-[#20252b] text-[18px] md:text-[20px] font-semibold whitespace-normal break-words overflow-visible"
+                      : "text-[#20252b] text-[18px] md:text-[20px] xl:text-[19px] min-[1440px]:text-[20px] font-semibold whitespace-normal break-words overflow-visible"
                   }`}
                 >
                   {service.title}
@@ -117,7 +141,7 @@ export default function Services() {
               <div
                 className={`w-full overflow-hidden rounded-[16px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                   isActive
-                    ? "h-[200px] sm:h-[240px] md:h-[260px] lg:h-[320px] opacity-100 mt-6 scale-100 shrink-0"
+                    ? "h-[200px] sm:h-[240px] md:h-[260px] lg:h-[320px] xl:h-[260px] min-[1440px]:h-[320px] opacity-100 mt-4 xl:mt-6 scale-100 shrink-0"
                     : "h-0 opacity-0 mt-0 scale-95 pointer-events-none"
                 }`}
               >
